@@ -12,10 +12,10 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Cairo:wght@300;900&display=swap');
         
-        :root { --primary: #00f3ff; --secondary: #ff0055; --bg: #020202; }
+        :root { --primary: #ff0055; --secondary: #00f3ff; --bg: #020202; }
         body { background: var(--bg); color: #fff; font-family: 'Cairo', sans-serif; overflow-x: hidden; min-height: 100vh; }
 
-        .hero-bg { position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle at 50% 50%, #0a0f1a 0%, #000 100%); }
+        .hero-bg { position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle at 50% 50%, #1a0a11 0%, #000 100%); }
         
         .titan-grid { display: grid; grid-template-columns: 100px 320px 1fr 320px; height: 100vh; gap: 0; }
 
@@ -25,17 +25,16 @@
             .logo-vertical { writing-mode: horizontal-tb !important; margin-bottom: 0 !important; font-size: 16px !important; }
             .glass-sidebar .flex-col { flex-direction: row !important; gap: 15px !important; }
             .btn-glow { width: 45px !important; height: 45px !important; }
-            .main-display { padding: 15px !important; }
+            .main-display { padding: 0 !important; }
         }
 
         .glass-sidebar { background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(50px); border-left: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; padding: 40px 0; }
         .glass-panel { background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(30px); border-right: 1px solid rgba(255,255,255,0.05); padding: 25px; display: flex; flex-direction: column; }
 
-        .main-display { padding: 40px; overflow-y: auto; scrollbar-width: none; }
-        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; }
+        .main-display { padding: 0; overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none; }
+        .video-grid { display: flex; flex-direction: column; gap: 0; }
 
-        .titan-card { position: relative; aspect-ratio: 9/16; background: #000; border-radius: 24px; border: 1px solid rgba(255,255,255,0.1); overflow: hidden; transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
-        .titan-card:hover { transform: translateY(-5px); border-color: var(--primary); box-shadow: 0 10px 30px rgba(0, 243, 255, 0.2); }
+        .titan-card { position: relative; width: 100%; height: 100vh; scroll-snap-align: start; background: #000; overflow: hidden; }
         
         .watermark { position: absolute; top: 15px; right: 15px; font-family: 'Orbitron'; font-size: 12px; font-weight: 900; color: rgba(255,255,255,0.3); pointer-events: none; z-index: 5; text-shadow: 0 0 5px #000; }
         
@@ -46,13 +45,19 @@
 
         .interaction-side { position: absolute; left: 15px; bottom: 80px; display: flex; flex-direction: column; gap: 20px; align-items: center; z-index: 10; }
         .action-btn { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); width: 45px; height: 45px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; }
-        .action-btn:hover { background: var(--primary); color: #000; }
+        .action-btn:hover { background: var(--primary); color: #fff; }
         .action-btn span { font-size: 10px; font-weight: bold; margin-top: 2px; }
 
         .btn-glow { background: rgba(255,255,255,0.05); width: 60px; height: 60px; border-radius: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
-        .upload-giant { background: linear-gradient(45deg, var(--primary), #0077ff); color: #000; font-family: 'Orbitron'; font-weight: 900; padding: 18px; border-radius: 20px; text-align: center; cursor: pointer; transition: 0.4s; box-shadow: 0 10px 20px rgba(0, 243, 255, 0.2); width: 100%; }
+        .btn-glow:hover { border-color: var(--primary); box-shadow: 0 0 15px var(--primary); }
+        .upload-giant { background: linear-gradient(45deg, var(--primary), #ff0095); color: #fff; font-family: 'Orbitron'; font-weight: 900; padding: 18px; border-radius: 20px; text-align: center; cursor: pointer; transition: 0.4s; box-shadow: 0 10px 20px rgba(255, 0, 85, 0.2); width: 100%; }
         
         .logo-vertical { font-family: 'Orbitron'; font-weight: 900; font-size: 20px; letter-spacing: 5px; writing-mode: vertical-rl; color: var(--primary); text-shadow: 0 0 15px var(--primary); }
+    
+        #chat-input:focus, #mega-upload:hover { border-color: var(--primary); }
+        .text-cyan-400 { color: #ff0095 !important; }
+        .bg-cyan-500 { background-color: var(--primary) !important; color: white !important; }
+        .border-cyan-500 { border-color: var(--primary) !important; }
     </style>
 </head>
 <body>
@@ -83,7 +88,7 @@
                 <h3 class="text-[10px] font-[Orbitron] opacity-40 tracking-widest uppercase">Global Chat</h3>
                 <div id="mini-chat" class="space-y-4 h-[250px] overflow-y-auto pr-2 opacity-80 text-[11px]"></div>
                 <div class="flex gap-2">
-                    <input id="chat-input" type="text" placeholder="أرسل رسالة..." class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-xs outline-none focus:border-cyan-500">
+                    <input id="chat-input" type="text" placeholder="أرسل رسالة..." class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-xs outline-none focus:border-pink-500">
                     <button onclick="sendMessage()" class="bg-cyan-500 text-black px-4 rounded-xl text-xs font-bold">إرسال</button>
                 </div>
             </div>
@@ -96,14 +101,6 @@
         </section>
 
         <main class="main-display">
-            <header class="flex justify-between items-center mb-10">
-                <div>
-                    <h1 class="text-4xl font-black italic tracking-tighter uppercase">Titan <span class="text-cyan-400">Stream</span></h1>
-                    <p class="text-[10px] opacity-40 font-[Orbitron]">GLOBAL_ENCRYPTED_FEED_2026</p>
-                </div>
-                <div id="user-id" class="px-5 py-2 bg-white/5 rounded-full border border-white/10 text-[10px] font-bold tracking-widest">ID: ----</div>
-            </header>
-
             <div class="video-grid" id="titan-grid"></div>
         </main>
 
@@ -125,7 +122,6 @@
     <script>
         const SHADOW_ID = localStorage.getItem('shadow_uid') || 'U_' + Math.random().toString(36).substr(2, 5).toUpperCase();
         localStorage.setItem('shadow_uid', SHADOW_ID);
-        document.getElementById('user-id').innerText = `ID: ${SHADOW_ID}`;
 
         const firebaseConfig = { databaseURL: "https://project-717e4-default-rtdb.firebaseio.com/" };
         firebase.initializeApp(firebaseConfig);
@@ -178,12 +174,12 @@
                     
                     <div class="interaction-side">
                         <div class="action-btn" onclick="likeVideo('${id}')">
-                            <i class="fas fa-heart"></i>
-                            <span>${vid.likes || 0}</span>
+                            <i class="fas fa-heart text-white"></i>
+                            <span class="text-white">${vid.likes || 0}</span>
                         </div>
                         <div class="action-btn" onclick="shareVideo('${id}')">
-                            <i class="fas fa-share"></i>
-                            <span>${vid.shares || 0}</span>
+                            <i class="fas fa-share text-white"></i>
+                            <span class="text-white">${vid.shares || 0}</span>
                         </div>
                     </div>
 
@@ -206,7 +202,7 @@
                         video.pause();
                     }
                 });
-            }, { threshold: 0.6 });
+            }, { threshold: 0.8 });
 
             document.querySelectorAll('.titan-card').forEach(card => observer.observe(card));
         }
