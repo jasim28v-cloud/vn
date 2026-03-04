@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHΔDØW | THE ULTIMATE TITAN 2026</title>
+    <title>SHΔDØW | PINK TITAN 2026</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://upload-widget.cloudinary.com/global/all.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
@@ -12,28 +12,16 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Cairo:wght@300;900&display=swap');
         
-        :root { --primary: #ff0055; --secondary: #00f3ff; --bg: #020202; }
-        body { background: var(--bg); color: #fff; font-family: 'Cairo', sans-serif; overflow-x: hidden; min-height: 100vh; }
+        :root { --primary: #ff007f; --secondary: #ff0055; --bg: #050005; }
+        body { background: var(--bg); color: #fff; font-family: 'Cairo', sans-serif; overflow: hidden; height: 100vh; }
 
-        .hero-bg { position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle at 50% 50%, #1a0a11 0%, #000 100%); }
+        .hero-bg { position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle at 50% 50%, #1a0a14 0%, #000 100%); }
         
-        .titan-grid { display: grid; grid-template-columns: 100px 320px 1fr 320px; height: 100vh; gap: 0; }
+        .titan-grid { display: grid; grid-template-columns: 80px 300px 1fr; height: 100vh; gap: 0; }
 
-        @media (max-width: 1200px) {
-            .titan-grid { grid-template-columns: 1fr; height: auto; display: flex; flex-direction: column; }
-            .glass-sidebar { flex-direction: row !important; width: 100%; height: 70px !important; padding: 0 20px !important; justify-content: space-between !important; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid rgba(255,255,255,0.1); }
-            .logo-vertical { writing-mode: horizontal-tb !important; margin-bottom: 0 !important; font-size: 16px !important; }
-            .glass-sidebar .flex-col { flex-direction: row !important; gap: 15px !important; }
-            .btn-glow { width: 45px !important; height: 45px !important; }
-            .main-display { padding: 0 !important; height: 100vh !important; }
-        }
-
-        .glass-sidebar { background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(50px); border-left: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; padding: 40px 0; }
-        .glass-panel { background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(30px); border-right: 1px solid rgba(255,255,255,0.05); padding: 25px; display: flex; flex-direction: column; }
-
-        /* تفعيل التصفح السلس */
+        /* تصفح نمط تيك توك */
         .main-display { 
-            padding: 0; 
+            height: 100vh; 
             overflow-y: scroll; 
             scroll-snap-type: y mandatory; 
             scrollbar-width: none; 
@@ -41,40 +29,43 @@
         }
         .main-display::-webkit-scrollbar { display: none; }
 
-        .video-grid { display: flex; flex-direction: column; gap: 0; }
-
         .titan-card { 
             position: relative; 
-            width: 100%; 
             height: 100vh; 
-            scroll-snap-align: start; 
-            scroll-snap-stop: always; /* يمنع تجاوز الفيديوهات عند السحب القوي */
+            width: 100%; 
+            max-width: 500px;
+            margin: 0 auto;
             background: #000; 
+            scroll-snap-align: start;
             overflow: hidden; 
         }
         
-        .watermark { position: absolute; top: 15px; right: 15px; font-family: 'Orbitron'; font-size: 12px; font-weight: 900; color: rgba(255,255,255,0.3); pointer-events: none; z-index: 5; text-shadow: 0 0 5px #000; }
+        .watermark { position: absolute; top: 20px; right: 20px; font-family: 'Orbitron'; font-size: 12px; font-weight: 900; color: rgba(255,255,255,0.3); z-index: 5; }
         
-        video { width: 100%; height: 100%; object-fit: cover; background: #000; cursor: pointer; }
+        video { width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
 
-        .card-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 40%, transparent 100%); display: flex; flex-direction: column; justify-content: flex-end; padding: 20px; pointer-events: none; }
-        .card-overlay input { pointer-events: auto; }
+        .interaction-side { position: absolute; right: 15px; bottom: 100px; display: flex; flex-direction: column; gap: 25px; align-items: center; z-index: 10; }
+        .action-btn { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); width: 50px; height: 50px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; border: 1px solid rgba(255,0,127,0.3); }
+        .action-btn:hover { background: var(--primary); color: #fff; box-shadow: 0 0 15px var(--primary); }
+        .action-btn span { font-size: 11px; font-weight: bold; margin-top: 2px; }
 
-        .interaction-side { position: absolute; left: 15px; bottom: 80px; display: flex; flex-direction: column; gap: 20px; align-items: center; z-index: 10; }
-        .action-btn { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); width: 45px; height: 45px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; }
-        .action-btn:hover { background: var(--primary); color: #fff; }
-        .action-btn span { font-size: 10px; font-weight: bold; margin-top: 2px; }
+        .card-info { position: absolute; bottom: 30px; left: 20px; right: 80px; z-index: 10; pointer-events: none; }
+        .card-info h3 { color: var(--primary); font-weight: 900; text-shadow: 0 0 10px rgba(255,0,127,0.5); }
 
-        .btn-glow { background: rgba(255,255,255,0.05); width: 60px; height: 60px; border-radius: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
-        .btn-glow:hover { border-color: var(--primary); box-shadow: 0 0 15px var(--primary); }
-        .upload-giant { background: linear-gradient(45deg, var(--primary), #ff0095); color: #fff; font-family: 'Orbitron'; font-weight: 900; padding: 18px; border-radius: 20px; text-align: center; cursor: pointer; transition: 0.4s; box-shadow: 0 10px 20px rgba(255, 0, 85, 0.2); width: 100%; }
+        .glass-sidebar { background: rgba(0, 0, 0, 0.8); border-left: 1px solid rgba(255,0,127,0.1); display: flex; flex-direction: column; align-items: center; padding: 30px 0; }
+        .glass-panel { background: rgba(15, 0, 10, 0.6); backdrop-filter: blur(30px); border-right: 1px solid rgba(255,0,127,0.1); padding: 25px; display: flex; flex-direction: column; }
+
+        .btn-glow { background: rgba(255,255,255,0.03); width: 50px; height: 50px; border-radius: 15px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; color: #ff007f; }
+        .btn-glow:hover { background: var(--primary); color: #fff; box-shadow: 0 0 20px var(--primary); }
         
-        .logo-vertical { font-family: 'Orbitron'; font-weight: 900; font-size: 20px; letter-spacing: 5px; writing-mode: vertical-rl; color: var(--primary); text-shadow: 0 0 15px var(--primary); }
-    
-        #chat-input:focus, #mega-upload:hover { border-color: var(--primary); }
-        .text-cyan-400 { color: #ff0095 !important; }
-        .bg-cyan-500 { background-color: var(--primary) !important; color: white !important; }
-        .border-cyan-500 { border-color: var(--primary) !important; }
+        .upload-giant { background: linear-gradient(45deg, var(--primary), #ff00ff); color: #fff; font-family: 'Orbitron'; font-weight: 900; padding: 15px; border-radius: 15px; text-align: center; cursor: pointer; transition: 0.4s; box-shadow: 0 5px 15px rgba(255, 0, 127, 0.3); width: 100%; }
+        
+        .logo-vertical { font-family: 'Orbitron'; font-weight: 900; font-size: 18px; writing-mode: vertical-rl; color: var(--primary); text-shadow: 0 0 15px var(--primary); }
+
+        @media (max-width: 800px) {
+            .titan-grid { grid-template-columns: 1fr; }
+            .glass-sidebar, .glass-panel { display: none; }
+        }
     </style>
 </head>
 <body>
@@ -83,57 +74,40 @@
 
     <div class="titan-grid">
         <aside class="glass-sidebar">
-            <div class="logo-vertical mb-20">SHΔDØW</div>
-            <div class="flex flex-col gap-8">
-                <div class="btn-glow" title="Home" onclick="openAd()"><i class="fas fa-home text-xl"></i></div>
-                <div class="btn-glow" title="Trending" onclick="openAd()"><i class="fas fa-fire text-xl text-orange-500"></i></div>
-                <div class="btn-glow" title="VIP" onclick="openAd()"><i class="fas fa-crown text-xl text-yellow-500"></i></div>
-                <div class="btn-glow" title="Safety" onclick="openAd()"><i class="fas fa-shield-halved text-xl"></i></div>
+            <div class="logo-vertical mb-20">SHΔDØW PINK</div>
+            <div class="flex flex-col gap-6">
+                <div class="btn-glow" title="Home"><i class="fas fa-home"></i></div>
+                <div class="btn-glow" title="VIP"><i class="fas fa-crown"></i></div>
             </div>
         </aside>
 
         <section class="glass-panel">
             <div class="mb-8">
-                <h3 class="text-[10px] font-[Orbitron] opacity-40 mb-3 tracking-widest">SYSTEM_LIVE</h3>
-                <div class="flex items-center gap-3 bg-white/5 p-4 rounded-2xl border border-white/10">
-                    <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                    <span class="text-[10px] font-bold tracking-tighter">CORE_TITAN_CONNECTED</span>
+                <h3 class="text-[10px] font-[Orbitron] text-pink-500 opacity-60 mb-3 tracking-widest">SYSTEM_LIVE</h3>
+                <div class="flex items-center gap-3 bg-pink-500/5 p-4 rounded-2xl border border-pink-500/20">
+                    <div class="w-2 h-2 rounded-full bg-pink-500 animate-pulse"></div>
+                    <span class="text-[10px] font-bold">PINK_TITAN_ONLINE</span>
                 </div>
             </div>
 
-            <div class="space-y-6 flex-1">
+            <div class="space-y-6 flex-1 overflow-hidden flex flex-col">
                 <h3 class="text-[10px] font-[Orbitron] opacity-40 tracking-widest uppercase">Global Chat</h3>
-                <div id="mini-chat" class="space-y-4 h-[250px] overflow-y-auto pr-2 opacity-80 text-[11px]"></div>
-                <div class="flex gap-2">
-                    <input id="chat-input" type="text" placeholder="أرسل رسالة..." class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-xs outline-none focus:border-pink-500">
-                    <button onclick="sendMessage()" class="bg-cyan-500 text-black px-4 rounded-xl text-xs font-bold">إرسال</button>
+                <div id="mini-chat" class="space-y-4 flex-1 overflow-y-auto pr-2 text-[11px]"></div>
+                <div class="flex flex-col gap-2">
+                    <input id="chat-input" type="text" placeholder="قل شيئاً..." class="w-full bg-white/5 border border-pink-500/20 rounded-xl p-3 text-xs outline-none focus:border-pink-500">
+                    <button onclick="sendMessage()" class="upload-giant !p-2 !text-xs">إرسال</button>
                 </div>
             </div>
 
             <div class="mt-8">
                 <div class="upload-giant" id="mega-upload">
-                    <i class="fas fa-plus-circle mr-2"></i> UPLOAD_TITAN
+                    <i class="fas fa-cloud-upload-alt mr-2"></i> UPLOAD
                 </div>
             </div>
         </section>
 
-        <main class="main-display">
-            <div class="video-grid" id="titan-grid"></div>
-        </main>
-
-        <section class="glass-panel border-r-0 border-l border-white/5">
-            <h3 class="text-[10px] font-[Orbitron] opacity-40 mb-6 uppercase">Leaderboard</h3>
-            <div class="space-y-4">
-                <div class="p-5 bg-white/5 rounded-3xl border border-white/5" onclick="openAd()">
-                    <div class="text-[9px] opacity-50 mb-1">TOTAL_TRAFFIC</div>
-                    <div class="text-xl font-black text-cyan-400">4.8 TB/s</div>
-                </div>
-                <div class="p-5 bg-white/5 rounded-3xl border border-white/5">
-                    <div class="text-[9px] opacity-50 mb-1">ACTIVE_CORES</div>
-                    <div class="text-xl font-black">12,840</div>
-                </div>
-            </div>
-        </section>
+        <main class="main-display" id="titan-grid">
+            </main>
     </div>
 
     <script>
@@ -146,9 +120,7 @@
 
         const AD_LINKS = [
             "https://www.effectivegatecpm.com/k60w64w4gk?key=564f3d8cc4ac85949f218179b742495e",
-            "https://www.effectivegatecpm.com/bxwxuk2f39?key=566216691dc8b76a740840e94f68f44c",
-            "https://www.effectivegatecpm.com/q7bf96ad4p?key=4272e67963ce67f1cfaeb4a56682d6ec",
-            "https://www.effectivegatecpm.com/w6ejwgptb?key=b77b52a8f4f7e4cdd1ac7bccc1b04a4d"
+            "https://www.effectivegatecpm.com/bxwxuk2f39?key=566216691dc8b76a740840e94f68f44c"
         ];
         
         let adToggle = 0;
@@ -160,8 +132,7 @@
         const CLOUD_NAME = "dssk5tabb", UPLOAD_PRESET = "bjebvo5p";
         const myWidget = cloudinary.createUploadWidget({ 
             cloudName: CLOUD_NAME, 
-            uploadPreset: UPLOAD_PRESET,
-            clientAllowedFormats: ["mp4", "mov", "webm"]
+            uploadPreset: UPLOAD_PRESET
         }, (err, res) => {
             if (!err && res.event === "success") {
                 db.ref('videos/').push({ 
@@ -186,22 +157,23 @@
                 const card = document.createElement('div');
                 card.className = 'titan-card';
                 card.innerHTML = `
-                    <div class="watermark">SHΔDØW TITAN</div>
-                    <video loop muted playsinline src="${vid.url}" onclick="togglePlay(this)"></video>
+                    <div class="watermark">PINK SHΔDØW</div>
+                    <video loop playsinline src="${vid.url}" onclick="togglePlay(this)"></video>
                     
                     <div class="interaction-side">
                         <div class="action-btn" onclick="likeVideo('${id}')">
-                            <i class="fas fa-heart text-white"></i>
-                            <span class="text-white">${vid.likes || 0}</span>
+                            <i class="fas fa-heart"></i>
+                            <span>${vid.likes || 0}</span>
                         </div>
                         <div class="action-btn" onclick="shareVideo('${id}')">
-                            <i class="fas fa-share text-white"></i>
-                            <span class="text-white">${vid.shares || 0}</span>
+                            <i class="fas fa-share"></i>
+                            <span>${vid.shares || 0}</span>
                         </div>
                     </div>
 
-                    <div class="card-overlay">
-                        <div class="text-xs font-bold text-cyan-400 mb-1">@${vid.sender}</div>
+                    <div class="card-info">
+                        <h3 class="text-lg font-black mb-1">@${vid.sender.split('_')[1]}</h3>
+                        <p class="text-xs opacity-70">تم الرفع بواسطة نظام Shadow Pink</p>
                     </div>
                 `;
                 grid.appendChild(card);
@@ -215,23 +187,18 @@
                     const video = entry.target.querySelector('video');
                     if (entry.isIntersecting) {
                         video.play().catch(e => {});
+                        video.muted = false;
                     } else {
                         video.pause();
-                        video.currentTime = 0; // إعادة الفيديو للبداية عند الخروج
                     }
                 });
-            }, { threshold: 0.6 }); // تم تعديل الحساسية لتكون أكثر سلاسة
+            }, { threshold: 0.8 });
 
             document.querySelectorAll('.titan-card').forEach(card => observer.observe(card));
         }
 
         function togglePlay(v) { 
-            if (v.paused) {
-                v.play();
-                v.muted = false;
-            } else {
-                v.pause();
-            }
+            v.paused ? v.play() : v.pause();
         }
 
         function likeVideo(id) {
@@ -241,7 +208,7 @@
 
         function shareVideo(id) {
             openAd();
-            navigator.clipboard.writeText(window.location.href).then(() => alert("تم نسخ الرابط!"));
+            navigator.clipboard.writeText(window.location.href);
             db.ref(`videos/${id}`).transaction(p => { if(p) p.shares = (p.shares || 0) + 1; return p; });
         }
 
@@ -259,8 +226,8 @@
             const val = s.val();
             if(val) Object.values(val).forEach(m => {
                 const msg = document.createElement('div');
-                msg.className = 'p-3 bg-white/5 rounded-xl border-r-2 border-cyan-500';
-                msg.innerHTML = `<span class="text-cyan-400 font-black block">${m.user}</span> ${m.text}`;
+                msg.className = 'p-3 bg-pink-500/5 rounded-xl border-r-2 border-pink-500';
+                msg.innerHTML = `<span class="text-pink-400 font-black block">${m.user}</span> ${m.text}`;
                 chat.appendChild(msg);
             });
             chat.scrollTop = chat.scrollHeight;
