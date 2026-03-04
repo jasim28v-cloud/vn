@@ -13,40 +13,51 @@
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Cairo:wght@300;900&display=swap');
         
         :root { --primary: #ff0055; --secondary: #00f3ff; --bg: #020202; }
-        body { background: var(--bg); color: #fff; font-family: 'Cairo', sans-serif; overflow-x: hidden; min-height: 100vh; }
+        body { background: var(--bg); color: #fff; font-family: 'Cairo', sans-serif; overflow: hidden; height: 100vh; }
 
         .hero-bg { position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle at 50% 50%, #1a0a11 0%, #000 100%); }
         
         .titan-grid { display: grid; grid-template-columns: 100px 320px 1fr 320px; height: 100vh; gap: 0; }
 
         @media (max-width: 1200px) {
-            .titan-grid { grid-template-columns: 1fr; height: auto; display: flex; flex-direction: column; }
-            .glass-sidebar { flex-direction: row !important; width: 100%; height: 70px !important; padding: 0 20px !important; justify-content: space-between !important; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid rgba(255,255,255,0.1); }
-            .logo-vertical { writing-mode: horizontal-tb !important; margin-bottom: 0 !important; font-size: 16px !important; }
-            .glass-sidebar .flex-col { flex-direction: row !important; gap: 15px !important; }
-            .btn-glow { width: 45px !important; height: 45px !important; }
-            .main-display { padding: 0 !important; }
+            .titan-grid { grid-template-columns: 1fr; height: 100vh; display: flex; flex-direction: column; }
+            .glass-sidebar { display: none !important; }
+            .glass-panel { display: none !important; }
+            .main-display { height: 100vh !important; }
         }
 
         .glass-sidebar { background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(50px); border-left: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; padding: 40px 0; }
         .glass-panel { background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(30px); border-right: 1px solid rgba(255,255,255,0.05); padding: 25px; display: flex; flex-direction: column; }
 
-        .main-display { padding: 0; overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none; }
-        .video-grid { display: flex; flex-direction: column; gap: 0; }
+        .main-display { height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; scroll-behavior: smooth; -ms-overflow-style: none; scrollbar-width: none; }
+        .main-display::-webkit-scrollbar { display: none; }
 
-        .titan-card { position: relative; width: 100%; height: 100vh; scroll-snap-align: start; background: #000; overflow: hidden; }
+        .video-grid { display: flex; flex-direction: column; width: 100%; }
+
+        .titan-card { 
+            position: relative; 
+            width: 100%; 
+            height: 100vh; 
+            scroll-snap-align: start; 
+            scroll-snap-stop: always;
+            background: #000; 
+            overflow: hidden; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
         
-        .watermark { position: absolute; top: 15px; right: 15px; font-family: 'Orbitron'; font-size: 12px; font-weight: 900; color: rgba(255,255,255,0.3); pointer-events: none; z-index: 5; text-shadow: 0 0 5px #000; }
+        .watermark { position: absolute; top: 20px; right: 20px; font-family: 'Orbitron'; font-size: 14px; font-weight: 900; color: rgba(255,255,255,0.4); pointer-events: none; z-index: 10; text-shadow: 0 0 10px rgba(0,0,0,0.8); }
         
-        video { width: 100%; height: 100%; object-fit: cover; background: #000; cursor: pointer; }
+        video { width: 100%; height: 100%; object-fit: cover; background: #000; cursor: pointer; transition: opacity 0.3s; }
 
-        .card-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 40%, transparent 100%); display: flex; flex-direction: column; justify-content: flex-end; padding: 20px; pointer-events: none; }
-        .card-overlay input { pointer-events: auto; }
+        .card-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 30%, transparent 100%); display: flex; flex-direction: column; justify-content: flex-end; padding: 30px; pointer-events: none; z-index: 5; }
 
-        .interaction-side { position: absolute; left: 15px; bottom: 80px; display: flex; flex-direction: column; gap: 20px; align-items: center; z-index: 10; }
-        .action-btn { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); width: 45px; height: 45px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; }
-        .action-btn:hover { background: var(--primary); color: #fff; }
-        .action-btn span { font-size: 10px; font-weight: bold; margin-top: 2px; }
+        .interaction-side { position: absolute; left: 20px; bottom: 100px; display: flex; flex-direction: column; gap: 25px; align-items: center; z-index: 15; }
+        .action-btn { background: rgba(0,0,0,0.4); backdrop-filter: blur(15px); width: 55px; height: 55px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 1px solid rgba(255,255,255,0.1); pointer-events: auto; }
+        .action-btn:hover { transform: scale(1.1); background: var(--primary); border-color: white; }
+        .action-btn i { font-size: 20px; }
+        .action-btn span { font-size: 11px; font-weight: bold; margin-top: 4px; }
 
         .btn-glow { background: rgba(255,255,255,0.05); width: 60px; height: 60px; border-radius: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
         .btn-glow:hover { border-color: var(--primary); box-shadow: 0 0 15px var(--primary); }
@@ -54,10 +65,8 @@
         
         .logo-vertical { font-family: 'Orbitron'; font-weight: 900; font-size: 20px; letter-spacing: 5px; writing-mode: vertical-rl; color: var(--primary); text-shadow: 0 0 15px var(--primary); }
     
-        #chat-input:focus, #mega-upload:hover { border-color: var(--primary); }
-        .text-cyan-400 { color: #ff0095 !important; }
-        .bg-cyan-500 { background-color: var(--primary) !important; color: white !important; }
-        .border-cyan-500 { border-color: var(--primary) !important; }
+        .text-pink-primary { color: #ff0055 !important; }
+        .bg-pink-primary { background-color: #ff0055 !important; }
     </style>
 </head>
 <body>
@@ -89,7 +98,7 @@
                 <div id="mini-chat" class="space-y-4 h-[250px] overflow-y-auto pr-2 opacity-80 text-[11px]"></div>
                 <div class="flex gap-2">
                     <input id="chat-input" type="text" placeholder="أرسل رسالة..." class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-xs outline-none focus:border-pink-500">
-                    <button onclick="sendMessage()" class="bg-cyan-500 text-black px-4 rounded-xl text-xs font-bold">إرسال</button>
+                    <button onclick="sendMessage()" class="bg-pink-primary text-white px-4 rounded-xl text-xs font-bold">إرسال</button>
                 </div>
             </div>
 
@@ -100,7 +109,7 @@
             </div>
         </section>
 
-        <main class="main-display">
+        <main class="main-display" id="main-scroller">
             <div class="video-grid" id="titan-grid"></div>
         </main>
 
@@ -109,7 +118,7 @@
             <div class="space-y-4">
                 <div class="p-5 bg-white/5 rounded-3xl border border-white/5" onclick="openAd()">
                     <div class="text-[9px] opacity-50 mb-1">TOTAL_TRAFFIC</div>
-                    <div class="text-xl font-black text-cyan-400">4.8 TB/s</div>
+                    <div class="text-xl font-black text-pink-primary">4.8 TB/s</div>
                 </div>
                 <div class="p-5 bg-white/5 rounded-3xl border border-white/5">
                     <div class="text-[9px] opacity-50 mb-1">ACTIVE_CORES</div>
@@ -184,7 +193,8 @@
                     </div>
 
                     <div class="card-overlay">
-                        <div class="text-xs font-bold text-cyan-400 mb-1">@${vid.sender}</div>
+                        <div class="text-lg font-black text-pink-primary mb-1">@${vid.sender}</div>
+                        <div class="text-[10px] opacity-60 font-[Orbitron]">ENCRYPTED_TITAN_STREAM</div>
                     </div>
                 `;
                 grid.appendChild(card);
@@ -198,11 +208,13 @@
                     const video = entry.target.querySelector('video');
                     if (entry.isIntersecting) {
                         video.play().catch(e => {});
+                        video.classList.add('opacity-100');
                     } else {
                         video.pause();
+                        video.classList.remove('opacity-100');
                     }
                 });
-            }, { threshold: 0.8 });
+            }, { threshold: 0.7 });
 
             document.querySelectorAll('.titan-card').forEach(card => observer.observe(card));
         }
@@ -241,8 +253,8 @@
             const val = s.val();
             if(val) Object.values(val).forEach(m => {
                 const msg = document.createElement('div');
-                msg.className = 'p-3 bg-white/5 rounded-xl border-r-2 border-cyan-500';
-                msg.innerHTML = `<span class="text-cyan-400 font-black block">${m.user}</span> ${m.text}`;
+                msg.className = 'p-3 bg-white/5 rounded-xl border-r-2 border-pink-500';
+                msg.innerHTML = `<span class="text-pink-primary font-black block">${m.user}</span> ${m.text}`;
                 chat.appendChild(msg);
             });
             chat.scrollTop = chat.scrollHeight;
