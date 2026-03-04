@@ -1,209 +1,228 @@
-<svg style="position: absolute; width: 0; height: 0;">
-    <defs>
-        <filter id="liquid-filter">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
-            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7" result="liquid" />
-            <feComposite in="SourceGraphic" in2="liquid" operator="atop" />
-        </filter>
-    </defs>
-</svg>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VØID-X | NEURAL SINGULARITY</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://upload-widget.cloudinary.com/global/all.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@800&family=Outfit:wght@100;900&display=swap');
 
-<script type="text/babel">
-    const { useState, useEffect, useRef, useMemo } = React;
-    const { motion, AnimatePresence } = window.Motion;
+        :root {
+            --neural-glow: #00ffcc;
+            --deep-void: #000205;
+            --plasma-gradient: linear-gradient(135deg, #00f3ff 0%, #7a00ff 100%);
+        }
 
-    const firebaseConfig = { databaseURL: "https://forg-c693e-default-rtdb.firebaseio.com/" };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+        body, html {
+            margin: 0; padding: 0;
+            background: var(--deep-void);
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+            overflow: hidden;
+        }
 
-    const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dfscughol/video/upload";
-    const UPLOAD_PRESET = "update_vk";
-    const AD_A = "https://www.effectivegatecpm.com/bxwxuk2f39?key=566216691dc8b76a740840e94f68f44c";
-    const AD_B = "https://www.effectivegatecpm.com/k60w64w4gk?key=564f3d8cc4ac85949f218179b742495e";
+        #singularity-canvas {
+            position: fixed; top: 0; left: 0; z-index: -1;
+            filter: contrast(120%) brightness(110%);
+        }
 
-    const Icon = ({ name, className, size = 24, strokeWidth = 2 }) => {
-        const LucideIcon = lucide.icons[name];
-        return LucideIcon ? <LucideIcon className={className} size={size} strokeWidth={strokeWidth} /> : null;
-    };
+        /* حاوية النبض العصبي */
+        .neural-card {
+            background: rgba(255, 255, 255, 0.01);
+            backdrop-filter: blur(80px) saturate(250%) contrast(150%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 80px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: all 1s cubic-bezier(0.075, 0.82, 0.165, 1);
+        }
 
-    const VideoCard = ({ video, isActive, onCommentClick, onProgressUpdate }) => {
-        const videoRef = useRef(null);
-        const [playing, setPlaying] = useState(false);
-        const [showHeart, setShowHeart] = useState(null);
-        const lastTap = useRef(0);
+        .neural-card::before {
+            content: ''; position: absolute; inset: -1px;
+            border-radius: 80px; padding: 2px;
+            background: var(--plasma-gradient);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor; mask-composite: exclude;
+            opacity: 0.3;
+        }
 
-        useEffect(() => {
-            if (isActive) { videoRef.current?.play().catch(() => {}); setPlaying(true); }
-            else { videoRef.current?.pause(); setPlaying(false); }
-        }, [isActive]);
+        .neural-card:hover {
+            transform: translateY(-20px) rotateY(5deg) rotateX(5deg);
+            background: rgba(255, 255, 255, 0.03);
+            box-shadow: 0 50px 100px rgba(0, 243, 255, 0.15);
+        }
 
-        const handleTimeUpdate = () => {
-            if (videoRef.current) {
-                onProgressUpdate((videoRef.current.currentTime / videoRef.current.duration) * 100);
+        .feed-container {
+            height: 100vh;
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            scrollbar-width: none;
+        }
+        .feed-container::-webkit-scrollbar { display: none; }
+
+        .snap-unit {
+            height: 100vh; scroll-snap-align: start;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        /* أزرار التفاعل المغناطيسية */
+        .magnetic-btn {
+            width: 80px; height: 80px;
+            border-radius: 30px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.1);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(20px);
+        }
+
+        .magnetic-btn:hover {
+            background: var(--plasma-gradient);
+            box-shadow: 0 0 40px var(--neural-glow);
+            transform: scale(1.2) translateY(-5px);
+            border: none;
+        }
+
+        /* واجهة الرفع المتطورة */
+        .singularity-trigger {
+            font-family: 'Syncopate', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 10px;
+            font-size: 0.8rem;
+            padding: 20px 50px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(0, 255, 204, 0.3);
+            position: relative;
+            overflow: hidden;
+            transition: 0.5s;
+        }
+
+        .singularity-trigger:hover {
+            letter-spacing: 15px;
+            background: var(--neural-glow);
+            color: black;
+            box-shadow: 0 0 50px var(--neural-glow);
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="singularity-canvas"></canvas>
+
+    <nav class="fixed top-0 w-full z-50 p-16 flex justify-between items-center pointer-events-none">
+        <div class="pointer-events-auto">
+            <h1 class="text-5xl font-black tracking-tighter" style="font-family: 'Syncopate';">VØID</h1>
+            <p class="text-[10px] tracking-[15px] text-cyan-400 mt-2 opacity-50">SINGULARITY_V3</p>
+        </div>
+        
+        <button class="singularity-trigger pointer-events-auto" id="launchPulse">
+            Initialize_Upload
+        </button>
+    </nav>
+
+    <main class="feed-container" id="singularityFeed">
+        </main>
+
+    <script>
+        // 1. محرك "النسيج الكوني" (Shader Background)
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({canvas: document.getElementById('singularity-canvas'), antialias: true, alpha: true});
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        const pointCount = 5000;
+        const positions = new Float32Array(pointCount * 3);
+        for(let i=0; i<pointCount*3; i++) positions[i] = (Math.random() - 0.5) * 100;
+        const geo = new THREE.BufferGeometry();
+        geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        const mat = new THREE.PointsMaterial({size: 0.05, color: 0x00ffcc, transparent: true, opacity: 0.4});
+        const points = new THREE.Points(geo, mat);
+        scene.add(points);
+        camera.position.z = 30;
+
+        function animate() {
+            requestAnimationFrame(animate);
+            points.rotation.y += 0.001;
+            points.rotation.x += 0.0005;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // 2. بروتوكول الرفع والربط
+        const CORE_API = {
+            FB: "https://forg-c693e-default-rtdb.firebaseio.com/singularity_v3.json",
+            ADS: [
+                "https://www.effectivegatecpm.com/bxwxuk2f39?key=566216691dc8b76a740840e94f68f44c",
+                "https://www.effectivegatecpm.com/k60w64w4gk?key=564f3d8cc4ac85949f218179b742495e"
+            ]
+        };
+
+        const uploader = cloudinary.createUploadWidget({
+            cloudName: 'dfscughol',
+            uploadPreset: 'update_vk',
+            styles: { palette: { window: '#000', sourceBg: '#000', action: '#00ffcc' } }
+        }, (err, res) => {
+            if (!err && res.event === "success") {
+                fetch(CORE_API.FB, { method: 'POST', body: JSON.stringify({url: res.info.secure_url, entropy: Math.random()}) })
+                .then(() => location.reload());
             }
-        };
+        });
 
-        const handleVideoClick = (e) => {
-            const now = Date.now();
-            if (now - lastTap.current < 300) {
-                setShowHeart({ x: e.clientX, y: e.clientY });
-                window.open(AD_A, "_blank");
-                setTimeout(() => setShowHeart(null), 800);
-            } else {
-                if (playing) { videoRef.current?.pause(); setPlaying(false); }
-                else { videoRef.current?.play(); setPlaying(true); }
+        document.getElementById('launchPulse').onclick = () => uploader.open();
+
+        // 3. بناء تجربة التصفح العصبية
+        async function initSingularity() {
+            const res = await fetch(CORE_API.FB);
+            const data = await res.json();
+            const feed = document.getElementById('singularityFeed');
+            
+            for(let key in data) {
+                feed.innerHTML += `
+                    <div class="snap-unit">
+                        <div class="w-[450px] h-[800px] neural-card overflow-hidden group">
+                            <video src="${data[key].url}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-1000" loop playsinline></video>
+                            
+                            <div class="absolute right-8 top-1/2 -translate-y-1/2 flex flex-col gap-10">
+                                <div class="magnetic-btn" onclick="window.open('${CORE_API.ADS[0]}')">
+                                    <span class="text-2xl">⚡</span>
+                                </div>
+                                <div class="magnetic-btn" onclick="window.open('${CORE_API.ADS[1]}')">
+                                    <span class="text-2xl">🔥</span>
+                                </div>
+                                <div class="magnetic-btn" onclick="window.open('${CORE_API.ADS[0]}')">
+                                    <span class="text-2xl">💠</span>
+                                </div>
+                            </div>
+
+                            <div class="absolute bottom-16 left-12">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                                    <span class="text-[10px] tracking-[5px] uppercase opacity-40">Live_Entropy</span>
+                                </div>
+                                <h2 class="text-3xl font-thin tracking-widest">PULSE_${key.slice(-4)}</h2>
+                            </div>
+                        </div>
+                    </div>
+                `;
             }
-            lastTap.current = now;
-        };
 
-        return (
-            <div className="video-section bg-black flex items-center justify-center gpu-accel">
-                <video ref={videoRef} onClick={handleVideoClick} onTimeUpdate={handleTimeUpdate} className="h-full w-full object-contain cursor-pointer gpu-accel" src={video.url} loop playsInline />
-                
-                <AnimatePresence>
-                    {showHeart && (
-                        <motion.div initial={{ scale: 0, opacity: 0 }} animate={{ scale: [0, 1.8, 1.2], opacity: [0, 1, 0] }} style={{ left: showHeart.x - 60, top: showHeart.y - 60 }} className="absolute z-50 pointer-events-none">
-                            <Icon name="Heart" className="text-pink-500 fill-pink-500" size={120} />
-                        </motion.div>
-                    )}
-                </AnimatePresence>
+            // محرك الاستجابة الحركية
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(e => {
+                    const v = e.target.querySelector('video');
+                    if(v) e.isIntersecting ? v.play() : v.pause();
+                });
+            }, { threshold: 0.8 });
+            document.querySelectorAll('.snap-unit').forEach(u => observer.observe(u));
+        }
 
-                <div className="absolute right-4 bottom-32 flex flex-col gap-8 items-center z-40 gpu-accel">
-                    {[ { icon: 'Heart', val: video.likes, ad: AD_A }, { icon: 'MessageCircle', val: video.comments, click: onCommentClick }, { icon: 'Share2', val: video.shares, ad: AD_A } ].map((btn, i) => (
-                        <div key={i} className="flex flex-col items-center gap-2">
-                            <button onClick={(e) => { if(btn.ad) window.open(btn.ad, "_blank"); if(btn.click) btn.click(); }} className="p-4 rounded-full liquid-metal nano-led glass-neumorphism group">
-                                <Icon name={btn.icon} className="text-white group-hover:text-pink-500 neon-icon" strokeWidth={1.5} />
-                            </button>
-                            <span className="text-[10px] font-black pink-glow-text uppercase">{btn.val || 0}</span>
-                        </div>
-                    ))}
-                </div>
-
-                <div className="absolute bottom-12 left-6 right-24 z-30 pointer-events-none gpu-accel">
-                    <div className="glass-neumorphism p-5 rounded-[24px] border-l-4 border-l-pink-500 max-w-sm">
-                        <h3 className="font-black text-lg text-pink-500 pink-glow-text">@{video.username}</h3>
-                        <p className="text-xs text-white/70 font-medium line-clamp-2">{video.caption}</p>
-                    </div>
-                </div>
-            </div>
-        );
-    };
-
-    const App = () => {
-        const [videos, setVideos] = useState([]);
-        const [loading, setLoading] = useState(true);
-        const [activeTab, setActiveTab] = useState("home");
-        const [activeIndex, setActiveIndex] = useState(0);
-        const [progress, setProgress] = useState(0);
-        const [isUploadOpen, setIsUploadOpen] = useState(false);
-        const [selectedVideoId, setSelectedVideoId] = useState(null);
-        const containerRef = useRef(null);
-
-        useEffect(() => {
-            db.ref("videos").on("value", (snap) => {
-                const data = snap.val();
-                if (data) setVideos(Object.entries(data).map(([id, v]) => ({ id, ...v })).reverse());
-                setLoading(false);
-            });
-        }, []);
-
-        const handleScroll = () => {
-            const index = Math.round(containerRef.current.scrollTop / containerRef.current.clientHeight);
-            if (index !== activeIndex) { setActiveIndex(index); setProgress(0); }
-        };
-
-        return (
-            <div className="h-screen w-screen bg-black overflow-hidden gpu-accel">
-                <div className="absolute top-0 left-0 right-0 z-40 p-8 flex justify-center items-center bg-gradient-to-b from-black/90 to-transparent pointer-events-none gpu-accel">
-                    <div className="flex flex-col items-center">
-                        <h1 className="text-3xl font-black italic text-pink-500 pink-glow-text uppercase">PINK VIBE</h1>
-                        <span className="text-[8px] font-black text-pink-500/60 uppercase tracking-[0.3em]">إنتاج الموقع</span>
-                        <div className="w-24 h-[2px] mt-2 bg-white/5 rounded-full overflow-hidden relative">
-                            <div className="absolute inset-y-0 right-0 ionic-progress" style={{ width: `${progress}%`, transition: 'width 0.1s' }} />
-                        </div>
-                    </div>
-                </div>
-
-                <AnimatePresence mode="wait">
-                    {activeTab === "home" ? (
-                        <motion.div key="home" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="h-full w-full">
-                            <div ref={containerRef} onScroll={handleScroll} className="video-container gpu-accel">
-                                {videos.map((v, i) => (
-                                    <VideoCard key={v.id} video={v} isActive={i === activeIndex} onCommentClick={() => { window.open(AD_B, "_blank"); setSelectedVideoId(v.id); setActiveTab("messages"); }} onProgressUpdate={setProgress} />
-                                ))}
-                            </div>
-                        </motion.div>
-                    ) : (
-                        <motion.div key="msg" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="h-full pt-32 px-6 bg-black/40 backdrop-blur-3xl overflow-y-auto">
-                            <button onClick={() => { setActiveTab("home"); setSelectedVideoId(null); }} className="text-pink-500 font-black mb-6 flex items-center gap-2 uppercase text-xs">
-                                <Icon name="ArrowLeft" size={16} className="neon-icon" /> العودة
-                            </button>
-                            <h2 className="text-2xl font-black pink-glow-text mb-8">الرسائل الخاصة</h2>
-                            <div className="space-y-4">
-                                {videos.filter(v => v.id === selectedVideoId || !selectedVideoId).map(v => (
-                                    <div key={v.id} className="glass-frosted-pink p-5 rounded-[24px] flex items-center gap-4">
-                                        <div className="w-16 h-16 rounded-xl overflow-hidden bg-white/10">
-                                            <video src={v.url} className="w-full h-full object-cover" />
-                                        </div>
-                                        <div className="flex-1 text-right">
-                                            <h3 className="font-black text-white">@{v.username}</h3>
-                                            <p className="text-[10px] text-zinc-500">{v.caption}</p>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-
-                <div className="absolute bottom-6 left-6 right-6 h-16 glass border border-pink-500/40 flex items-center justify-around z-40 rounded-2xl px-4 gpu-accel">
-                    <button onClick={() => setActiveTab("home")} className={`flex flex-col items-center gap-1 ${activeTab === 'home' ? 'text-pink-500' : 'text-zinc-600'}`}>
-                        <Icon name="Home" size={20} className="neon-icon" />
-                        <span className="text-[10px] font-black">الرئيسية</span>
-                    </button>
-                    <button onClick={() => setIsUploadOpen(true)} className="flex flex-col items-center gap-1 text-pink-500 scale-125 fab-pulse bg-pink-500/10 p-2 rounded-full border border-pink-500/30">
-                        <Icon name="Plus" size={24} className="neon-icon" />
-                        <span className="text-[8px] font-black">تحميل</span>
-                    </button>
-                    <button onClick={() => setActiveTab("messages")} className={`flex flex-col items-center gap-1 ${activeTab === 'messages' ? 'text-pink-500' : 'text-zinc-600'}`}>
-                        <Icon name="MessageCircle" size={20} className="neon-icon" />
-                        <span className="text-[10px] font-black">الرسائل</span>
-                    </button>
-                </div>
-
-                <AnimatePresence>
-                    {isUploadOpen && (
-                        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl">
-                            <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="glass-neumorphism w-full max-md rounded-[32px] overflow-hidden p-8">
-                                <div className="flex justify-between items-center mb-8">
-                                    <h2 className="text-xl font-black text-pink-500 pink-glow-text">رفع فيديو جديد</h2>
-                                    <button onClick={() => setIsUploadOpen(false)}><Icon name="X" className="neon-icon" /></button>
-                                </div>
-                                <div className="space-y-6">
-                                    <input id="u" type="text" placeholder="اسم المستخدم..." className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 outline-none text-xs font-bold" />
-                                    <textarea id="c" placeholder="الوصف..." className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 h-24 outline-none text-xs font-bold" />
-                                    <input id="f" type="file" accept="video/*" className="w-full text-xs text-zinc-500" />
-                                    <button onClick={async () => {
-                                        const u = document.getElementById('u').value;
-                                        const c = document.getElementById('c').value;
-                                        const f = document.getElementById('f').files[0];
-                                        if(!u || !f) return alert("يرجى ملء البيانات");
-                                        const fd = new FormData(); fd.append("file", f); fd.append("upload_preset", UPLOAD_PRESET);
-                                        const res = await fetch(CLOUDINARY_URL, { method: "POST", body: fd }).then(r => r.json());
-                                        if(res.secure_url) {
-                                            await db.ref("videos").push({ url: res.secure_url, username: u, caption: c, likes: 0, comments: 0, shares: 0, timestamp: Date.now() });
-                                            setIsUploadOpen(false);
-                                        }
-                                    }} className="w-full bg-pink-600 text-white font-black py-4 rounded-2xl shadow-[0_0_20px_rgba(236,72,153,0.4)] uppercase text-xs">بدء الرفع</button>
-                                </div>
-                            </motion.div>
-                        </div>
-                    )}
-                </AnimatePresence>
-            </div>
-        );
-    };
-
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<App />);
-</script>
+        initSingularity();
+    </script>
+</body>
+</html>
