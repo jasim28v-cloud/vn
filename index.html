@@ -13,7 +13,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Cairo:wght@300;900&display=swap');
         
         :root { --primary: #ff0055; --secondary: #00f3ff; --bg: #020202; }
-        body { background: var(--bg); color: #fff; font-family: 'Cairo', sans-serif; overflow: hidden; height: 100vh; margin: 0; }
+        body { background: var(--bg); color: #fff; font-family: 'Cairo', sans-serif; overflow-x: hidden; min-height: 100vh; margin: 0; }
 
         .hero-bg { position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle at 50% 50%, #1a0a11 0%, #000 100%); }
         
@@ -21,33 +21,36 @@
 
         @media (max-width: 1200px) {
             .titan-grid { grid-template-columns: 1fr; height: 100vh; display: flex; flex-direction: column; }
-            .glass-sidebar { display: none !important; }
-            .glass-panel { display: none !important; }
-            .main-display { height: 100vh !important; width: 100vw !important; }
+            .glass-sidebar { flex-direction: row !important; width: 100%; height: 60px !important; padding: 0 20px !important; justify-content: space-between !important; position: absolute; top: 0; z-index: 100; border-bottom: 1px solid rgba(255,255,255,0.1); }
+            .logo-vertical { writing-mode: horizontal-tb !important; margin-bottom: 0 !important; font-size: 16px !important; }
+            .glass-sidebar .flex-col { flex-direction: row !important; gap: 15px !important; }
+            .btn-glow { width: 40px !important; height: 40px !important; border-radius: 12px !important; }
+            .glass-panel { display: none; } /* إخفاء الجوانب في الجوال لتركيز كامل على الفيديوهات */
+            .main-display { height: 100vh; }
         }
 
         .glass-sidebar { background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(50px); border-left: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; padding: 40px 0; }
         .glass-panel { background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(30px); border-right: 1px solid rgba(255,255,255,0.05); padding: 25px; display: flex; flex-direction: column; }
 
+        /* تعديل التصفح السلس */
         .main-display { 
-            height: 100vh; 
+            padding: 0; 
             overflow-y: scroll; 
             scroll-snap-type: y mandatory; 
+            scrollbar-width: none; 
             scroll-behavior: smooth;
             -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
         }
         .main-display::-webkit-scrollbar { display: none; }
 
-        .video-grid { display: flex; flex-direction: column; width: 100%; }
+        .video-grid { display: flex; flex-direction: column; gap: 0; }
 
         .titan-card { 
             position: relative; 
             width: 100%; 
             height: 100vh; 
             scroll-snap-align: start; 
-            scroll-snap-stop: always;
+            scroll-snap-stop: always; /* يضمن توقف التمرير عند كل فيديو */
             background: #000; 
             overflow: hidden; 
             display: flex;
@@ -55,26 +58,23 @@
             justify-content: center;
         }
         
-        .watermark { position: absolute; top: 20px; right: 20px; font-family: 'Orbitron'; font-size: 14px; font-weight: 900; color: rgba(255,255,255,0.4); pointer-events: none; z-index: 10; text-shadow: 0 0 10px rgba(0,0,0,0.8); }
+        .watermark { position: absolute; top: 20px; right: 20px; font-family: 'Orbitron'; font-size: 12px; font-weight: 900; color: rgba(255,255,255,0.3); pointer-events: none; z-index: 20; text-shadow: 0 0 5px #000; }
         
-        video { width: 100%; height: 100%; object-fit: cover; background: #000; cursor: pointer; }
+        video { width: 100%; height: 100%; object-fit: cover; background: #000; cursor: pointer; transition: opacity 0.3s; }
 
-        .card-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 30%, transparent 100%); display: flex; flex-direction: column; justify-content: flex-end; padding: 30px; pointer-events: none; z-index: 5; }
+        .card-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 30%, transparent 100%); display: flex; flex-direction: column; justify-content: flex-end; padding: 30px; pointer-events: none; z-index: 10; }
+        .card-overlay * { pointer-events: auto; }
 
-        .interaction-side { position: absolute; left: 20px; bottom: 100px; display: flex; flex-direction: column; gap: 25px; align-items: center; z-index: 15; }
-        .action-btn { background: rgba(0,0,0,0.4); backdrop-filter: blur(15px); width: 55px; height: 55px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 1px solid rgba(255,255,255,0.1); pointer-events: auto; }
-        .action-btn:hover { transform: scale(1.1); background: var(--primary); border-color: white; }
-        .action-btn i { font-size: 20px; }
-        .action-btn span { font-size: 11px; font-weight: bold; margin-top: 4px; }
+        .interaction-side { position: absolute; left: 20px; bottom: 100px; display: flex; flex-direction: column; gap: 20px; align-items: center; z-index: 20; }
+        .action-btn { background: rgba(255,255,255,0.1); backdrop-filter: blur(15px); width: 50px; height: 50px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; border: 1px solid rgba(255,255,255,0.1); }
+        .action-btn:hover { background: var(--primary); transform: scale(1.1); }
+        .action-btn span { font-size: 11px; font-weight: bold; margin-top: 2px; }
 
         .btn-glow { background: rgba(255,255,255,0.05); width: 60px; height: 60px; border-radius: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
         .btn-glow:hover { border-color: var(--primary); box-shadow: 0 0 15px var(--primary); }
         .upload-giant { background: linear-gradient(45deg, var(--primary), #ff0095); color: #fff; font-family: 'Orbitron'; font-weight: 900; padding: 18px; border-radius: 20px; text-align: center; cursor: pointer; transition: 0.4s; box-shadow: 0 10px 20px rgba(255, 0, 85, 0.2); width: 100%; }
         
         .logo-vertical { font-family: 'Orbitron'; font-weight: 900; font-size: 20px; letter-spacing: 5px; writing-mode: vertical-rl; color: var(--primary); text-shadow: 0 0 15px var(--primary); }
-    
-        .text-pink-primary { color: #ff0055 !important; }
-        .bg-pink-primary { background-color: #ff0055 !important; }
     </style>
 </head>
 <body>
@@ -97,7 +97,7 @@
                 <h3 class="text-[10px] font-[Orbitron] opacity-40 mb-3 tracking-widest">SYSTEM_LIVE</h3>
                 <div class="flex items-center gap-3 bg-white/5 p-4 rounded-2xl border border-white/10">
                     <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                    <span class="text-[10px] font-bold tracking-tighter">CORE_TITAN_CONNECTED</span>
+                    <span class="text-[10px] font-bold tracking-tighter text-green-400">CORE_TITAN_CONNECTED</span>
                 </div>
             </div>
 
@@ -106,7 +106,7 @@
                 <div id="mini-chat" class="space-y-4 h-[250px] overflow-y-auto pr-2 opacity-80 text-[11px]"></div>
                 <div class="flex gap-2">
                     <input id="chat-input" type="text" placeholder="أرسل رسالة..." class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-xs outline-none focus:border-pink-500">
-                    <button onclick="sendMessage()" class="bg-pink-primary text-white px-4 rounded-xl text-xs font-bold">إرسال</button>
+                    <button onclick="sendMessage()" class="bg-pink-600 text-white px-4 rounded-xl text-xs font-bold">إرسال</button>
                 </div>
             </div>
 
@@ -117,7 +117,7 @@
             </div>
         </section>
 
-        <main class="main-display" id="main-scroller">
+        <main class="main-display" id="scroll-container">
             <div class="video-grid" id="titan-grid"></div>
         </main>
 
@@ -126,7 +126,7 @@
             <div class="space-y-4">
                 <div class="p-5 bg-white/5 rounded-3xl border border-white/5" onclick="openAd()">
                     <div class="text-[9px] opacity-50 mb-1">TOTAL_TRAFFIC</div>
-                    <div class="text-xl font-black text-pink-primary">4.8 TB/s</div>
+                    <div class="text-xl font-black text-pink-500">4.8 TB/s</div>
                 </div>
                 <div class="p-5 bg-white/5 rounded-3xl border border-white/5">
                     <div class="text-[9px] opacity-50 mb-1">ACTIVE_CORES</div>
@@ -146,9 +146,7 @@
 
         const AD_LINKS = [
             "https://www.effectivegatecpm.com/k60w64w4gk?key=564f3d8cc4ac85949f218179b742495e",
-            "https://www.effectivegatecpm.com/bxwxuk2f39?key=566216691dc8b76a740840e94f68f44c",
-            "https://www.effectivegatecpm.com/q7bf96ad4p?key=4272e67963ce67f1cfaeb4a56682d6ec",
-            "https://www.effectivegatecpm.com/w6ejwgptb?key=b77b52a8f4f7e4cdd1ac7bccc1b04a4d"
+            "https://www.effectivegatecpm.com/bxwxuk2f39?key=566216691dc8b76a740840e94f68f44c"
         ];
         
         let adToggle = 0;
@@ -201,8 +199,7 @@
                     </div>
 
                     <div class="card-overlay">
-                        <div class="text-lg font-black text-pink-primary mb-1">@${vid.sender}</div>
-                        <div class="text-[10px] opacity-60 font-[Orbitron]">ENCRYPTED_TITAN_STREAM</div>
+                        <div class="text-xs font-bold text-pink-500 mb-1">@${vid.sender}</div>
                     </div>
                 `;
                 grid.appendChild(card);
@@ -210,17 +207,25 @@
             initAutoPlay();
         });
 
+        // تحسين ميزة التمرير والتشغيل التلقائي
         function initAutoPlay() {
+            const observerOptions = {
+                root: document.getElementById('scroll-container'),
+                threshold: 0.6 // يجب أن يظهر 60% من الفيديو ليبدأ العمل
+            };
+
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     const video = entry.target.querySelector('video');
                     if (entry.isIntersecting) {
-                        video.play().catch(e => {});
+                        video.play().catch(e => console.log("Auto-play blocked"));
+                        entry.target.style.opacity = "1";
                     } else {
                         video.pause();
+                        entry.target.style.opacity = "0.5"; // تخفيف إضاءة الفيديوهات غير النشطة
                     }
                 });
-            }, { threshold: 0.6 });
+            }, observerOptions);
 
             document.querySelectorAll('.titan-card').forEach(card => observer.observe(card));
         }
@@ -228,7 +233,7 @@
         function togglePlay(v) { 
             if (v.paused) {
                 v.play();
-                v.muted = false;
+                v.muted = false; // تشغيل الصوت عند الضغط
             } else {
                 v.pause();
             }
@@ -260,7 +265,7 @@
             if(val) Object.values(val).forEach(m => {
                 const msg = document.createElement('div');
                 msg.className = 'p-3 bg-white/5 rounded-xl border-r-2 border-pink-500';
-                msg.innerHTML = `<span class="text-pink-primary font-black block">${m.user}</span> ${m.text}`;
+                msg.innerHTML = `<span class="text-pink-500 font-black block">${m.user}</span> ${m.text}`;
                 chat.appendChild(msg);
             });
             chat.scrollTop = chat.scrollHeight;
