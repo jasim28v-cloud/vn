@@ -17,7 +17,7 @@
 
         .hero-bg { position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle at 50% 50%, #200010 0%, #000 100%); }
         
-        .titan-grid { display: grid; grid-template-columns: 80px 300px 1fr; height: 100vh; gap: 0; }
+        .titan-grid { display: grid; grid-template-columns: 80px 320px 1fr; height: 100vh; gap: 0; }
 
         @media (max-width: 1024px) {
             .titan-grid { grid-template-columns: 1fr; }
@@ -25,7 +25,7 @@
         }
 
         .glass-sidebar { background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); border-left: 1px solid rgba(255,0,127,0.1); display: flex; flex-direction: column; align-items: center; padding: 30px 0; }
-        .glass-panel-chat { background: rgba(15, 0, 8, 0.6); backdrop-filter: blur(30px); border-right: 1px solid rgba(255,0,127,0.1); padding: 20px; display: flex; flex-direction: column; }
+        .glass-panel-chat { background: rgba(15, 0, 8, 0.6); backdrop-filter: blur(30px); border-right: 1px solid rgba(255,0,127,0.1); padding: 25px; display: flex; flex-direction: column; }
 
         .main-display { 
             height: 100vh; 
@@ -47,26 +47,26 @@
         }
 
         .titan-video-wrapper { position: relative; height: 100%; aspect-ratio: 9/16; background: #000; }
-        
         video { width: 100%; height: 100%; object-fit: cover; }
 
         .interaction-side { position: absolute; right: 15px; bottom: 100px; display: flex; flex-direction: column; gap: 20px; align-items: center; z-index: 10; }
-        .action-btn { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); width: 50px; height: 50px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; border: 1px solid rgba(255,0,127,0.3); }
-        .action-btn:hover { background: var(--primary); color: #fff; transform: scale(1.1); }
+        .action-btn { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); width: 55px; height: 55px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; border: 1px solid rgba(255,0,127,0.3); }
+        .action-btn:hover { background: var(--primary); color: #fff; transform: scale(1.1); box-shadow: 0 0 15px var(--primary); }
         .action-btn span { font-size: 11px; font-weight: bold; margin-top: 2px; }
 
-        .video-info { position: absolute; bottom: 30px; left: 20px; right: 70px; z-index: 10; pointer-events: none; }
-        .video-info h4 { color: var(--primary); font-weight: 900; text-shadow: 0 0 10px rgba(255,0,127,0.5); }
+        .video-info { position: absolute; bottom: 40px; left: 20px; z-index: 10; pointer-events: none; }
+        .video-info h4 { color: var(--primary); font-weight: 900; text-shadow: 0 0 10px rgba(255,0,127,0.5); font-size: 18px; }
 
-        .btn-glow { background: rgba(255,0,127,0.05); width: 50px; height: 50px; border-radius: 15px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid rgba(255,0,127,0.2); transition: 0.3s; margin-bottom: 20px; }
+        .btn-glow { background: rgba(255,0,127,0.05); width: 55px; height: 55px; border-radius: 18px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid rgba(255,0,127,0.2); transition: 0.3s; margin-bottom: 25px; }
         .btn-glow:hover { background: var(--primary); color: white; box-shadow: 0 0 20px var(--primary); }
         
-        .upload-giant { background: linear-gradient(45deg, var(--primary), #ff00ff); color: #fff; font-family: 'Orbitron'; font-weight: 900; padding: 15px; border-radius: 15px; text-align: center; cursor: pointer; transition: 0.4s; box-shadow: 0 5px 15px rgba(255, 0, 127, 0.3); width: 100%; }
+        .upload-giant { background: linear-gradient(45deg, var(--primary), #ff00ff); color: #fff; font-family: 'Orbitron'; font-weight: 900; padding: 18px; border-radius: 20px; text-align: center; cursor: pointer; transition: 0.4s; box-shadow: 0 5px 15px rgba(255, 0, 127, 0.4); width: 100%; }
         
         .logo-vertical { font-family: 'Orbitron'; font-weight: 900; font-size: 18px; letter-spacing: 5px; writing-mode: vertical-rl; color: var(--primary); text-shadow: 0 0 15px var(--primary); margin-bottom: 30px; }
         
         #mini-chat::-webkit-scrollbar { width: 4px; }
         #mini-chat::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+        .chat-msg { background: rgba(255,0,127,0.05); border-right: 3px solid var(--primary); padding: 10px; border-radius: 8px; margin-bottom: 8px; }
     </style>
 </head>
 <body>
@@ -76,31 +76,31 @@
     <div class="titan-grid">
         <aside class="glass-sidebar">
             <div class="logo-vertical">SHΔDØW</div>
-            <div class="btn-glow" title="Home" onclick="openAd()"><i class="fas fa-home text-lg"></i></div>
-            <div class="btn-glow" title="VIP" onclick="openAd()"><i class="fas fa-crown text-lg text-yellow-500"></i></div>
-            <div class="btn-glow" title="Settings" onclick="openAd()"><i class="fas fa-cog text-lg"></i></div>
+            <div class="btn-glow" title="Home" onclick="openAd()"><i class="fas fa-home text-xl"></i></div>
+            <div class="btn-glow" title="Trending" onclick="openAd()"><i class="fas fa-fire text-xl text-orange-400"></i></div>
+            <div class="btn-glow" title="VIP" onclick="openAd()"><i class="fas fa-crown text-xl text-yellow-500"></i></div>
         </aside>
 
         <section class="glass-panel-chat">
             <div class="mb-6">
-                <div class="flex items-center gap-3 bg-pink-500/10 p-3 rounded-xl border border-pink-500/20">
+                <div class="flex items-center gap-3 bg-pink-500/10 p-4 rounded-2xl border border-pink-500/20">
                     <div class="w-2 h-2 rounded-full bg-pink-500 animate-pulse"></div>
-                    <span class="text-[10px] font-bold tracking-widest text-pink-500">SYSTEM_PINK_ACTIVE</span>
+                    <span class="text-[10px] font-bold tracking-widest text-pink-400">CORE_PINK_CONNECTED</span>
                 </div>
             </div>
 
-            <div class="flex flex-col flex-1">
-                <h3 class="text-[10px] font-[Orbitron] opacity-60 tracking-widest uppercase mb-4">Live Chat</h3>
-                <div id="mini-chat" class="flex-1 overflow-y-auto space-y-3 mb-4 pr-2 text-[12px]"></div>
-                <div class="space-y-2">
-                    <input id="chat-input" type="text" placeholder="اكتب شيئاً..." class="w-full bg-white/5 border border-pink-500/20 rounded-xl p-3 text-xs outline-none focus:border-pink-500 transition-all">
+            <div class="flex flex-col flex-1 overflow-hidden">
+                <h3 class="text-[10px] font-[Orbitron] opacity-60 tracking-widest uppercase mb-4">Global Chat</h3>
+                <div id="mini-chat" class="flex-1 overflow-y-auto space-y-2 mb-4 pr-2 text-[12px]"></div>
+                <div class="space-y-3">
+                    <input id="chat-input" type="text" placeholder="أرسل رسالة..." class="w-full bg-white/5 border border-pink-500/20 rounded-xl p-3 text-xs outline-none focus:border-pink-500 transition-all">
                     <button onclick="sendMessage()" class="upload-giant text-xs">إرسال</button>
                 </div>
             </div>
 
             <div class="mt-6">
-                <div class="upload-giant" id="mega-upload" style="background: #222; border: 1px solid var(--primary);">
-                    <i class="fas fa-cloud-upload-alt mr-2"></i> UPLOAD
+                <div class="upload-giant" id="mega-upload" style="background: transparent; border: 1px solid var(--primary);">
+                    <i class="fas fa-cloud-upload-alt mr-2"></i> UPLOAD_TITAN
                 </div>
             </div>
         </section>
@@ -117,30 +117,16 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        const AD_LINKS = [
-            "https://www.effectivegatecpm.com/k60w64w4gk?key=564f3d8cc4ac85949f218179b742495e",
-            "https://www.effectivegatecpm.com/bxwxuk2f39?key=566216691dc8b76a740840e94f68f44c"
-        ];
-        
-        let adToggle = 0;
-        function openAd() {
-            window.open(AD_LINKS[adToggle], '_blank');
-            adToggle = (adToggle + 1) % AD_LINKS.length;
-        }
+        const AD_LINKS = ["https://www.effectivegatecpm.com/k60w64w4gk?key=564f3d8cc4ac85949f218179b742495e"];
+        function openAd() { window.open(AD_LINKS[0], '_blank'); }
 
         const CLOUD_NAME = "dssk5tabb", UPLOAD_PRESET = "bjebvo5p";
         const myWidget = cloudinary.createUploadWidget({ 
-            cloudName: CLOUD_NAME, 
-            uploadPreset: UPLOAD_PRESET,
-            clientAllowedFormats: ["mp4", "mov", "webm"]
+            cloudName: CLOUD_NAME, uploadPreset: UPLOAD_PRESET 
         }, (err, res) => {
             if (!err && res.event === "success") {
                 db.ref('videos/').push({ 
-                    url: res.info.secure_url, 
-                    sender: SHADOW_ID, 
-                    likes: 0, 
-                    shares: 0,
-                    timestamp: Date.now() 
+                    url: res.info.secure_url, sender: SHADOW_ID, likes: 0, shares: 0, timestamp: Date.now() 
                 });
             }
         });
@@ -159,24 +145,22 @@
                 container.innerHTML = `
                     <div class="titan-video-wrapper">
                         <video loop playsinline src="${vid.url}" onclick="togglePlay(this)"></video>
-                        
                         <div class="interaction-side">
                             <div class="action-btn" onclick="likeVideo('${id}')">
                                 <i class="fas fa-heart"></i>
                                 <span>${vid.likes || 0}</span>
                             </div>
                             <div class="action-btn" onclick="shareVideo('${id}')">
-                                <i class="fas fa-share-alt"></i>
+                                <i class="fas fa-share"></i>
                                 <span>${vid.shares || 0}</span>
                             </div>
                             <div class="action-btn" onclick="openAd()">
-                                <i class="fas fa-ellipsis-h"></i>
+                                <i class="fas fa-plus text-pink-400"></i>
                             </div>
                         </div>
-
                         <div class="video-info">
-                            <h4 class="text-sm">@${vid.sender}</h4>
-                            <p class="text-[10px] opacity-70">SHΔDØW TITAN CONTENT</p>
+                            <h4>@${vid.sender}</h4>
+                            <p class="text-xs opacity-50 font-[Orbitron]">ENCRYPTED_TITAN_STREAM</p>
                         </div>
                     </div>
                 `;
@@ -190,7 +174,7 @@
                 entries.forEach(entry => {
                     const video = entry.target.querySelector('video');
                     if (entry.isIntersecting) {
-                        video.play().catch(e => {});
+                        video.play().catch(() => {});
                         video.muted = false;
                     } else {
                         video.pause();
@@ -200,9 +184,7 @@
             document.querySelectorAll('.video-container').forEach(c => observer.observe(c));
         }
 
-        function togglePlay(v) { 
-            v.paused ? v.play() : v.pause();
-        }
+        function togglePlay(v) { v.paused ? v.play() : v.pause(); }
 
         function likeVideo(id) {
             openAd();
@@ -223,13 +205,13 @@
             }
         }
 
-        db.ref('global_chat').limitToLast(20).on('value', s => {
+        db.ref('global_chat').limitToLast(25).on('value', s => {
             const chat = document.getElementById('mini-chat');
             chat.innerHTML = '';
             const val = s.val();
             if(val) Object.values(val).forEach(m => {
                 const msg = document.createElement('div');
-                msg.className = 'p-3 bg-pink-500/5 rounded-xl border-r-2 border-pink-500';
+                msg.className = 'chat-msg';
                 msg.innerHTML = `<span class="text-pink-500 font-bold block">${m.user}</span> ${m.text}`;
                 chat.appendChild(msg);
             });
