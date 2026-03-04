@@ -3,172 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PINK VIBE | المستقبل</title>
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <title>PINK VIBE | FUTURE</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Noto+Sans+Arabic:wght@400;900&display=swap');
         :root { --pink: #ff007a; }
         body { background: #000; color: #fff; font-family: 'Noto+Sans+Arabic', sans-serif; margin: 0; overflow: hidden; }
-        .pink-glow-text { text-shadow: 0 0 15px rgba(255, 0, 122, 0.8); font-family: 'Orbitron', sans-serif; }
-        .glass-neumorphism { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(25px); border: 1px solid rgba(255, 0, 122, 0.2); }
+        .pink-glow { text-shadow: 0 0 15px var(--pink); font-family: 'Orbitron', sans-serif; }
+        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); border: 1px solid rgba(255, 0, 122, 0.2); }
         .video-container { height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none; }
         .video-container::-webkit-scrollbar { display: none; }
-        .video-section { height: 100vh; scroll-snap-align: start; position: relative; width: 100vw; display: flex; align-items: center; justify-content: center; background: #000; }
-        .ionic-progress { background: linear-gradient(90deg, transparent, var(--pink), #fff); box-shadow: 0 0 10px var(--pink); height: 100%; border-radius: 20px; transition: width 0.1s linear; }
-        .fab-pulse { animation: fab-glow 3s infinite; }
-        @keyframes fab-glow { 0% { box-shadow: 0 0 0 0 rgba(255, 0, 122, 0.4); } 70% { box-shadow: 0 0 0 15px rgba(255, 0, 122, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 0, 122, 0); } }
+        .video-card { height: 100vh; width: 100vw; scroll-snap-align: start; position: relative; display: flex; align-items: center; justify-content: center; }
         video { height: 100%; width: 100%; object-fit: cover; }
+        .ionic-bar { width: 100px; height: 3px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; margin-top: 5px; }
+        .ionic-progress { height: 100%; background: var(--pink); width: 0%; box-shadow: 0 0 10px var(--pink); }
+        .fab-btn { background: var(--pink); box-shadow: 0 0 20px rgba(255, 0, 122, 0.5); animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
     </style>
 </head>
 <body>
-    <div id="root"></div>
 
-    <script type="text/babel">
-        const { useState, useEffect, useRef } = React;
-        const { motion, AnimatePresence } = window.Motion;
+    <div class="absolute top-0 w-full z-50 pt-8 flex flex-col items-center pointer-events-none">
+        <h1 class="text-3xl font-black text-pink-500 pink-glow uppercase">PINK VIBE</h1>
+        <span class="text-[10px] font-bold text-white/40 tracking-widest">إنتاج الموقع</span>
+        <div class="ionic-bar"><div id="mainProgress" class="ionic-progress"></div></div>
+    </div>
 
-        const firebaseConfig = { databaseURL: "https://forg-c693e-default-rtdb.firebaseio.com/" };
-        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
+    <div id="feed" class="video-container">
+        </div>
 
+    <div class="absolute bottom-6 left-8 right-8 h-16 glass rounded-3xl flex items-center justify-around z-50">
+        <button onclick="showTab('home')" class="text-pink-500">🏠</button>
+        <button onclick="document.getElementById('uploadModal').classList.remove('hidden')" class="fab-btn w-12 h-12 rounded-full -mt-10 flex items-center justify-center text-white text-2xl font-bold">+</button>
+        <button onclick="showTab('msgs')" class="text-white/40">💬</button>
+    </div>
+
+    <div id="uploadModal" class="fixed inset-0 z-[100] bg-black/90 backdrop-blur-md hidden flex items-center justify-center p-6">
+        <div class="glass w-full p-8 rounded-[40px] text-center">
+            <h2 class="text-xl font-black text-pink-500 mb-6">نقطة التحميل</h2>
+            <input type="file" id="videoFile" accept="video/*" class="mb-6 text-xs">
+            <button onclick="handleUpload()" class="w-full bg-pink-600 py-4 rounded-2xl font-black shadow-lg">بدء الرفع</button>
+            <button onclick="document.getElementById('uploadModal').classList.add('hidden')" class="mt-4 text-white/20 text-xs">إلغاء</button>
+        </div>
+    </div>
+
+    <script>
+        const FIREBASE_URL = "https://forg-c693e-default-rtdb.firebaseio.com/videos.json";
         const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dfscughol/video/upload";
-        const UPLOAD_PRESET = "update_vk";
+        const PRESET = "update_vk";
         const AD_A = "https://www.effectivegatecpm.com/bxwxuk2f39?key=566216691dc8b76a740840e94f68f44c";
         const AD_B = "https://www.effectivegatecpm.com/k60w64w4gk?key=564f3d8cc4ac85949f218179b742495e";
 
-        const Icon = ({ name, className, size = 24 }) => {
-            const LucideIcon = lucide.icons[name];
-            return LucideIcon ? <LucideIcon className={className} size={size} /> : null;
-        };
-
-        const VideoCard = ({ video, isActive, onCommentClick, onProgressUpdate }) => {
-            const videoRef = useRef(null);
-            const [showHeart, setShowHeart] = useState(null);
-            const lastTap = useRef(0);
-
-            useEffect(() => {
-                if (isActive) videoRef.current?.play().catch(() => {});
-                else videoRef.current?.pause();
-            }, [isActive]);
-
-            const handleVideoClick = (e) => {
-                const now = Date.now();
-                if (now - lastTap.current < 300) {
-                    setShowHeart({ x: e.clientX, y: e.clientY });
-                    window.open(AD_A, "_blank");
-                    setTimeout(() => setShowHeart(null), 800);
-                } else {
-                    videoRef.current.paused ? videoRef.current.play() : videoRef.current.pause();
-                }
-                lastTap.current = now;
-            };
-
-            return (
-                <div className="video-section">
-                    <video ref={videoRef} onClick={handleVideoClick} 
-                        onTimeUpdate={() => onProgressUpdate((videoRef.current.currentTime / videoRef.current.duration) * 100)}
-                        src={video.url} loop playsInline />
-                    
-                    <AnimatePresence>
-                        {showHeart && (
-                            <motion.div initial={{ scale: 0 }} animate={{ scale: 1.2, opacity: 0 }} 
-                                style={{ position: 'absolute', left: showHeart.x - 50, top: showHeart.y - 50, zIndex: 100 }}>
-                                <Icon name="Heart" className="text-pink-500 fill-pink-500" size={100} />
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-
-                    <div className="absolute right-4 bottom-32 flex flex-col gap-6 z-50">
-                        <button onClick={() => window.open(AD_A, "_blank")} className="p-4 glass-neumorphism rounded-full"><Icon name="Heart" /></button>
-                        <button onClick={onCommentClick} className="p-4 glass-neumorphism rounded-full"><Icon name="MessageCircle" /></button>
-                        <button onClick={() => window.open(AD_A, "_blank")} className="p-4 glass-neumorphism rounded-full"><Icon name="Share2" /></button>
-                    </div>
-                </div>
-            );
-        };
-
-        const App = () => {
-            const [videos, setVideos] = useState([]);
-            const [activeTab, setActiveTab] = useState("home");
-            const [activeIndex, setActiveIndex] = useState(0);
-            const [progress, setProgress] = useState(0);
-            const [isUploadOpen, setIsUploadOpen] = useState(false);
-            const containerRef = useRef(null);
-
-            useEffect(() => {
-                db.ref("videos").on("value", (snap) => {
-                    const data = snap.val();
-                    if (data) setVideos(Object.entries(data).map(([id, v]) => ({ id, ...v })).reverse());
+        async function loadFeed() {
+            try {
+                const res = await fetch(FIREBASE_URL);
+                const data = await res.json();
+                const feed = document.getElementById('feed');
+                feed.innerHTML = '';
+                
+                Object.values(data).reverse().forEach(v => {
+                    const card = document.createElement('div');
+                    card.className = 'video-card';
+                    card.innerHTML = `
+                        <video src="${v.url}" loop playsinline onclick="this.paused?this.play():this.pause()" ontimeupdate="updateBar(this)"></video>
+                        <div class="absolute right-4 bottom-32 flex flex-col gap-6">
+                            <button onclick="window.open('${AD_A}')" class="w-12 h-12 glass rounded-full flex items-center justify-center">❤️</button>
+                            <button onclick="showTab('msgs')" class="w-12 h-12 glass rounded-full flex items-center justify-center">💬</button>
+                            <button onclick="window.open('${AD_A}')" class="w-12 h-12 glass rounded-full flex items-center justify-center">🔗</button>
+                        </div>
+                    `;
+                    feed.appendChild(card);
                 });
-            }, []);
+            } catch (e) { console.error("Error loading feed"); }
+        }
 
-            return (
-                <div className="h-screen w-screen bg-black relative">
-                    <div className="absolute top-0 left-0 right-0 z-[100] pt-8 flex flex-col items-center pointer-events-none">
-                        <h1 className="text-3xl font-black text-pink-500 pink-glow-text">PINK VIBE</h1>
-                        <span className="text-[10px] font-bold text-white/40 tracking-widest">إنتاج الموقع</span>
-                        <div className="w-32 h-[3px] mt-2 bg-white/10 rounded-full overflow-hidden">
-                            <div className="ionic-progress" style={{ width: `${progress}%` }} />
-                        </div>
-                    </div>
+        function updateBar(video) {
+            const progress = (video.currentTime / video.duration) * 100;
+            document.getElementById('mainProgress').style.width = progress + '%';
+        }
 
-                    {activeTab === "home" ? (
-                        <div ref={containerRef} onScroll={() => setActiveIndex(Math.round(containerRef.current.scrollTop / window.innerHeight))} className="video-container">
-                            {videos.map((v, i) => (
-                                <VideoCard key={v.id} video={v} isActive={i === activeIndex} 
-                                    onCommentClick={() => { window.open(AD_B, "_blank"); setActiveTab("messages"); }} 
-                                    onProgressUpdate={setProgress} />
-                            ))}
-                        </div>
-                    ) : (
-                        <div className="h-full pt-40 px-6 bg-black/90 backdrop-blur-3xl overflow-y-auto">
-                            <h2 className="text-2xl font-black text-pink-500 mb-6">الرسائل</h2>
-                            {videos.map(v => (
-                                <div key={v.id} className="glass-neumorphism p-4 rounded-2xl mb-4 flex items-center gap-4">
-                                    <div className="w-12 h-12 bg-pink-500/20 rounded-lg overflow-hidden"><video src={v.url} /></div>
-                                    <p className="text-xs text-white/60 font-bold">بدء محادثة حول هذا الفيديو...</p>
-                                </div>
-                            ))}
-                        </div>
-                    )}
+        function showTab(tab) {
+            if(tab === 'msgs') {
+                window.open(AD_B, '_blank');
+                alert("تم توجيهك لقسم الرسائل الخاص بالتعليقات");
+            } else {
+                location.reload();
+            }
+        }
 
-                    <div className="absolute bottom-6 left-8 right-8 h-16 glass-neumorphism rounded-3xl flex items-center justify-around z-[100]">
-                        <button onClick={() => setActiveTab("home")} className={activeTab === 'home' ? 'text-pink-500' : 'text-white/30'}><Icon name="Home" /></button>
-                        <button onClick={() => setIsUploadOpen(true)} className="bg-pink-500 p-3 rounded-full fab-pulse -mt-12 border-4 border-black"><Icon name="Plus" className="text-white" /></button>
-                        <button onClick={() => setActiveTab("messages")} className={activeTab === 'messages' ? 'text-pink-500' : 'text-white/30'}><Icon name="MessageCircle" /></button>
-                    </div>
+        async function handleUpload() {
+            const file = document.getElementById('videoFile').files[0];
+            if(!file) return alert("اختر فيديو");
+            
+            const btn = event.target;
+            btn.innerText = "جاري الرفع...";
+            btn.disabled = true;
 
-                    <AnimatePresence>
-                        {isUploadOpen && (
-                            <div className="fixed inset-0 z-[200] flex items-center justify-center p-6 bg-black/90 backdrop-blur-md">
-                                <div className="glass-neumorphism w-full p-8 rounded-[40px] text-center">
-                                    <h2 className="text-xl font-black text-pink-500 mb-6 uppercase">نقطة التحميل</h2>
-                                    <input id="f" type="file" accept="video/*" className="mb-6 text-xs text-white/50" />
-                                    <button onClick={async () => {
-                                        const f = document.getElementById('f').files[0];
-                                        if(!f) return;
-                                        const fd = new FormData(); fd.append("file", f); fd.append("upload_preset", UPLOAD_PRESET);
-                                        const res = await fetch(CLOUDINARY_URL, { method: "POST", body: fd }).then(r => r.json());
-                                        await db.ref("videos").push({ url: res.secure_url, timestamp: Date.now() });
-                                        setIsUploadOpen(false);
-                                    }} className="w-full bg-pink-600 py-4 rounded-2xl font-black">بدء الرفع</button>
-                                    <button onClick={() => setIsUploadOpen(false)} className="mt-4 text-white/20 text-xs">إلغاء</button>
-                                </div>
-                            </div>
-                        )}
-                    </AnimatePresence>
-                </div>
-            );
-        };
+            const fd = new FormData();
+            fd.append("file", file);
+            fd.append("upload_preset", PRESET);
 
-        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+            try {
+                const cRes = await fetch(CLOUDINARY_URL, { method: "POST", body: fd });
+                const cData = await cRes.json();
+                
+                await fetch(FIREBASE_URL, {
+                    method: "POST",
+                    body: JSON.stringify({ url: cData.secure_url, time: Date.now() })
+                });
+                
+                location.reload();
+            } catch (e) { alert("فشل الرفع"); btn.disabled = false; btn.innerText = "بدء الرفع"; }
+        }
+
+        window.onload = loadFeed;
     </script>
 </body>
 </html>
